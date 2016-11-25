@@ -39,6 +39,9 @@ class GameDetail {
     document.getElementById("away_switch").addEventListener("click", this.injectPlayerData.bind(this, 1));
   }
 
+  /**
+  * getBoxScoreData
+  */
   getBoxScoreData() {
     var self = this;
     var url = "http://gd2.mlb.com"+ this.data.game_data_directory +"/boxscore.json";

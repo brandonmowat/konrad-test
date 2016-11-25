@@ -11,19 +11,17 @@ class ListGame {
     var htmlDOM = " \
       <div class=\"list-game\"> \
         <div class=\"row\"> \
-          <h2>"+ this.home_team_name +"</h2> \
+          <h2 class=\"teamName\">"+ this.home_team_name +"</h2> \
           <h2>"+ (this.linescore?this.linescore.r.home:"") +"</h2> \
         </div> \
         <div class=\"row\"> \
-          <h2>"+ this.away_team_name +"</h2> \
+          <h2 class=\"teamName\">"+ this.away_team_name +"</h2> \
           <h2>"+ (this.linescore?this.linescore.r.away:"") +"</h2> \
         </div> \
         <div class=\"row\"><h2>"+ this.status.status +"</h2></div> \
       </div> \
     ";
 
-    // var parser = new DOMParser();
-    // var doc = parser.parseFromString(htmlDOM, "text/html");
     return htmlDOM;
   }
 }

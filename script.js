@@ -3,21 +3,54 @@
 // Initialize
 var myDate = new MyDate();
 document.getElementById("date").innerHTML = myDate.day_of_week + " " + myDate.month_of_year + " " + myDate.day + " " + myDate.year;
+// Get our favourite team. If it's not initialized yet: set it to Blue Jays.
+var fav_team = localStorage.getItem("fav_team");
+if (!fav_team) {
+  localStorage.setItem("fav_team", "Blue Jays");
+  var fav_team = "Blue Jays";
+  document.getElementById("fav_team").innerHTML = fav_team;
+} else {
+  document.getElementById("fav_team").innerHTML = fav_team;
+}
+
+// get today's data
 getData(myDate.year, myDate.month, myDate.day);
 
 // Set date event handlers
 document.getElementById("nextButton").addEventListener("click", nextDate);
 document.getElementById("prevButton").addEventListener("click", prevDate);
 
-// Handle game table element click
+/**
+* setFavTeam - sets a new favourite team and re-renders todays data
+* @param {String} the new favourite team.
+*/
+function setFavTeam(team) {
+  localStorage.setItem("fav_team", team);
+  fav_team = team;
+  document.getElementById("fav_team").innerHTML = fav_team;
+  // uncomment following line to force back to list game view
+  //getData(myDate.year, myDate.month, myDate.day);
+}
+
+/**
+* gamesTableEventHandler - Set event listeners and handle game table events
+* @param {Object} 
+*/
 function gamesTableEventHandler(data) {
   var games = document.getElementsByClassName("list-game"); // Get the games
   for (var i = 0; i < games.length; i++) {
-    // Add event listeners to each element
+    // Add click event listeners to each element
     games[i].addEventListener("click", showDetailView.bind(this, i, data));
+
+    // set event listeners to set new fav team.
+    var teams = games[i].getElementsByClassName("teamName");
+    for (var j = 0; j < teams.length; j++) {
+      teams[j].addEventListener("click", setFavTeam.bind(this, teams[j].innerHTML));
+    }
   }
 }
 
+// Render the detail view
 function showDetailView(i, data) {
   // render detail with data
   if (data.game) {
@@ -29,7 +62,6 @@ function showDetailView(i, data) {
     document.getElementById("content").innerHTML = DetailView.render();
     document.getElementById("GoBack").addEventListener("click", goBack);
   }
-
 }
 
 // Handle transition to next date
@@ -82,7 +114,6 @@ function getData(year, month, day) {
       console.log(JSON.parse(xhr.response));
       document.getElementById("content").innerHTML = renderGames(JSON.parse(xhr.response));
       gamesTableEventHandler(JSON.parse(xhr.response).data.games);
-      console.log(JSON.parse(xhr.response).data.games);
     }
   };
   xhr.send();
@@ -101,8 +132,13 @@ function renderGames(data) {
           new ListGame(curr.home_team_name, curr.away_team_name, curr.status, curr.linescore).render()
         );
       });
-      return games_table.reduce(function(a, b) {
-        return a+b;
+      return games_table.reduce(function(acc, curr) {
+        console.log(localStorage.getItem("fav_team"));
+        if (curr.includes(fav_team)) {
+          return curr+acc; // put fave team at the top
+        } else {
+          return acc+curr;
+        }
       }, "");
     }
     else if (games.constructor.name === 'Object') {
@@ -112,7 +148,7 @@ function renderGames(data) {
     }
   }
   else {
-    return "No Games today."
+    return "<h2 class=\"text-center\">No Games today.</h2>"
   }
 }
 

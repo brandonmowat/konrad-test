@@ -3,6 +3,23 @@ body {
   font-size: 16px;
 }
 
+.favTeam {
+  font-weight: 500;
+  margin: 20px 0;
+}
+
+.teamName {
+  cursor: pointer;
+}
+
+.teamName:hover {
+  text-decoration: underline;
+}
+
+.text-center {
+  text-align: center;
+}
+
 .bold {
   font-weight: 500;
 }

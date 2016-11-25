@@ -1,5 +1,0 @@
-class Nav {
-  constructor() {
-    
-  }
-}
